@@ -1,3 +1,8 @@
 spring:
   application:
     name: tblog-demo-boot
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://124.70.85.121:3306/tblog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: zhao1025338
