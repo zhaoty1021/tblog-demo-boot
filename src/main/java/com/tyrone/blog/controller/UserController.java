@@ -1,5 +1,6 @@
 package com.tyrone.blog.controller;
 
+import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.domain.User;
 import com.tyrone.blog.service.UserService;
 import jakarta.annotation.Resource;
@@ -20,6 +21,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/list")
+    @SysLog("查询用户列表")
     public List<User> list() {
        return userService.list();
     }
