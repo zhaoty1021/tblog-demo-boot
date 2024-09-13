@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class User implements Serializable {
 
     private static final long serialVersionUID = -8239370740328279056L;
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private String username;
