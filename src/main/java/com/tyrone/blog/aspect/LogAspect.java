@@ -8,12 +8,13 @@ import com.tyrone.blog.utils.IpUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -28,25 +29,36 @@ import java.util.Arrays;
 @Slf4j
 @Aspect
 public class LogAspect {
+    private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
     @Resource
     private LogService logService;
-    //定义切点 切点表达式指向SysLog注解，我们再业务方法上可以加上SysLog注解，然后所标注
-    //的方法都能进行日志记录
+    //定义切点 切点表达式指向SysLog注解，我们再业务方法上可以加上SysLog注解，然后所标注的方法都能进行日志记录
     @Pointcut("@annotation(com.tyrone.blog.annotation.SysLog)")
     public void logPointCut() {
     }
-    @Around("logPointCut()")
-    public Object around(ProceedingJoinPoint point) throws Throwable {
-        long beginTime = System.currentTimeMillis();
-        //执行方法
-        Object result = point.proceed();
-        //执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
 
-        //保存日志
-        saveSysLog(point, time);
+    // 方法执行前记录日志
+    @Before("logPointCut()")
+    public void logBeforeMethod(JoinPoint joinPoint) {
+        logger.info("Executing method: {} with arguments: {}",
+                joinPoint.getSignature().toShortString(),
+                joinPoint.getArgs());
+    }
 
-        return result;
+    // 方法执行后记录日志
+    @AfterReturning(pointcut = "logPointCut()", returning = "result")
+    public void logAfterMethod(JoinPoint joinPoint, Object result) {
+        logger.info("Method executed: {} with return value: {}",
+                joinPoint.getSignature().toShortString(),
+                result);
+    }
+
+    // 捕捉异常时记录日志
+    @AfterThrowing(pointcut = "logPointCut()", throwing = "exception")
+    public void logAfterException(JoinPoint joinPoint, Throwable exception) {
+        logger.error("Method: {} threw exception: {}",
+                joinPoint.getSignature().toShortString(),
+                exception.getMessage(), exception);
     }
     private void saveSysLog(ProceedingJoinPoint joinPoint, long time) throws Throwable {
 

@@ -1,6 +1,7 @@
 package com.tyrone.blog.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.domain.User;
 import com.tyrone.blog.domain.response.ResultResponse;
 import com.tyrone.blog.enums.CodeEnum;
@@ -20,12 +21,14 @@ public class LoginController {
     private UserService userService;
     // 用户注册
     @PostMapping("/register")
+    @SysLog("用户注册")
     public void register(@RequestBody User user) {
         // 调用注册服务
         userService.register(user);
     }
     // 用户登录
     @PostMapping("/login")
+    @SysLog("用户登录")
     public ResultResponse<User> login(@RequestParam String username, @RequestParam String password) {
         System.out.println(username);
         // 调用登录服务
