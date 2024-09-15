@@ -3,12 +3,15 @@ package com.tyrone.blog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tyrone.blog.domain.User;
+import com.tyrone.blog.enums.CodeEnum;
+import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
 import com.tyrone.blog.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
 * @author zhaot
@@ -25,7 +28,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public void register(User user) {
-        String encryptedPassword = passwordEncoder.encode(user.getPassword()); // 加密密码
+        // 使用 Optional 检查用户名是否为空
+        String username = Optional.ofNullable(user.getUsername())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
+        // 使用 Optional 检查密码是否为空
+        String password = Optional.ofNullable(user.getPassword())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "password"));
+        String encryptedPassword = passwordEncoder.encode(password); // 加密密码
         user.setPassword(encryptedPassword);
         System.out.println(encryptedPassword);
         userMapper.insert(user);

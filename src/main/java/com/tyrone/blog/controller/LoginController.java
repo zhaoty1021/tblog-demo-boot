@@ -5,6 +5,7 @@ import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.domain.User;
 import com.tyrone.blog.domain.response.ResultResponse;
 import com.tyrone.blog.enums.CodeEnum;
+import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +23,10 @@ public class LoginController {
     // 用户注册
     @PostMapping("/register")
     @SysLog("用户注册")
-    public void register(@RequestBody User user) {
+    public ResultResponse<String> register(@RequestBody User user) {
         // 调用注册服务
         userService.register(user);
+        return ResultResponse.success(user.getUsername());// 注册成功
     }
     // 用户登录
     @PostMapping("/login")
