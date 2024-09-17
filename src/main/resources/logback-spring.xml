@@ -1,63 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
 
-    <!-- 定义日志的上下文名称 -->
-    <contextName>spring-boot-app</contextName>
+    <!-- 彩色日志依赖的渲染类 -->
+    <!-- 定义了一个名为clr的转换规则，它使用org.springframework.boot.logging.logback.ColorConverter类进行转换，这个元素通常用于将日志输出中的文本着色，以便更容易地区分不同的日志级别或其他信息 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <!-- WhitespaceThrowableProxyConverter和ExtendedWhitespaceThrowableProxyConverter都是用于将异常信息转换为字符串，并将其中的换行符替换为空格，以便更容易地在日志输出中显示的类。它们之间的区别在于，ExtendedWhitespaceThrowableProxyConverter在输出异常信息时会包含更多的详细信息，例如异常的类名、方法名和行号等 -->
+    <!-- 定义了一个名为wex的转换规则，它使用org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter类进行转换，这个元素通常用于将异常信息转换为字符串，并将其中的换行符替换为空格，以便更容易地在日志输出中显示 -->
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <!-- 定义了一个名为wEx的转换规则，它使用org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter类进行转换，这个元素通常用于将异常信息转换为字符串，并将其中的换行符替换为空格，以便更容易地在日志输出中显示 -->
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
-    <!-- 日志的基本属性 -->
-    <property name="LOG_PATH" value="logs" />
-    <property name="LOG_FILE" value="${LOG_PATH}/application.log" />
-    <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive" />
+    <!-- 定义日志文件保存的位置和文件名称 -->
+    <property name="LOG_HOME" value="./logs"/>
 
-    <!-- 控制台日志输出 -->
+    <!-- 日志模式：控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 使用PatternLayout来定义日志格式 -->
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <!-- 控制台日志颜色配置 -->
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] %cyan(%logger{36}) - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
-    <!-- 文件日志输出，按天滚动，保留30天 -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE}</file>
+    <!-- 日志模式：输出到文件（按天分割文件） -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件位置 -->
+        <file>${LOG_HOME}/application.log</file>
+        <!-- 定义文件滚动策略（按日期滚动） -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件名格式，按日期滚动 -->
-            <fileNamePattern>${LOG_ARCHIVE}/application.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
-            <!-- 保留的历史日志文件的最大天数 -->
+            <!-- 日志文件的命名格式：app-yyyy-MM-dd.log -->
+            <fileNamePattern>${LOG_HOME}/archive/application-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 保留最近的 30 天日志 -->
             <maxHistory>30</maxHistory>
-            <!-- 每个日志文件的最大大小 -->
-            <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
+        <!-- 日志内容格式 -->
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
-    <!-- 异常日志单独输出到 error.log 文件 -->
+    <!-- 日志模式：记录ERROR级别日志到单独的文件 -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/error.log</file>
+        <!-- 错误日志文件位置 -->
+        <file>${LOG_HOME}/error.log</file>
+        <!-- 按日期分割错误日志 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_ARCHIVE}/error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/archive/error-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
+        <!-- 日志内容格式 -->
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
-    <!-- 定义日志的级别 -->
+    <!-- 根级别配置：日志级别、附加器 -->
     <root level="INFO">
-        <!-- 控制台输出 -->
         <appender-ref ref="CONSOLE" />
-        <!-- 文件输出 -->
-        <appender-ref ref="FILE" />
-    </root>
-
-    <!-- 错误级别日志单独记录到 error.log -->
-    <logger name="ERROR_LOGGER" level="ERROR" additivity="false">
+        <!-- INFO级别及以上的日志会被写入info.log -->
+        <appender-ref ref="INFO_FILE" />
+        <!-- ERROR级别的日志会被写入error.log -->
         <appender-ref ref="ERROR_FILE" />
-    </logger>
-
-    <!-- 其他自定义的包日志级别 -->
-    <logger name="com.example" level="DEBUG" />
+    </root>
 
 </configuration>

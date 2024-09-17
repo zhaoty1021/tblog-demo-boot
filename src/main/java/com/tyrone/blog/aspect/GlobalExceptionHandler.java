@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     public ResultResponse<String> handleIllegalArgumentException(BizException e) {
         // 记录异常日志
-        logger.error("BizException: {}", e.getMessage(), e);
+
         return ResultResponse.error(e);
     }
 }

@@ -2,6 +2,7 @@ package com.tyrone.blog.aspect;
 import com.alibaba.fastjson.JSON;
 import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.domain.Log;
+import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.LogService;
 import com.tyrone.blog.utils.DateFormatUtil;
 import com.tyrone.blog.utils.IpUtil;
@@ -40,6 +41,13 @@ public class LogAspect {
     // 方法执行前记录日志
     @Before("logPointCut()")
     public void logBeforeMethod(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();  // 获取方法参数
+        // 对参数进行脱敏处理
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof String && args[i].toString().toLowerCase().contains("password")) {
+                args[i] = "******";  // 将密码等敏感信息脱敏
+            }
+        }
         logger.info("Executing method: {} with arguments: {}",
                 joinPoint.getSignature().toShortString(),
                 joinPoint.getArgs());
@@ -48,6 +56,13 @@ public class LogAspect {
     // 方法执行后记录日志
     @AfterReturning(pointcut = "logPointCut()", returning = "result")
     public void logAfterMethod(JoinPoint joinPoint, Object result) {
+        Object[] args = joinPoint.getArgs();  // 获取方法参数
+        // 对参数进行脱敏处理
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof String && args[i].toString().toLowerCase().contains("password")) {
+                args[i] = "******";  // 将密码等敏感信息脱敏
+            }
+        }
         logger.info("Method executed: {} with return value: {}",
                 joinPoint.getSignature().toShortString(),
                 result);
@@ -55,10 +70,18 @@ public class LogAspect {
 
     // 捕捉异常时记录日志
     @AfterThrowing(pointcut = "logPointCut()", throwing = "exception")
-    public void logAfterException(JoinPoint joinPoint, Throwable exception) {
+    public void logAfterException(JoinPoint joinPoint, BizException exception) {
+        // 获取堆栈信息
+        StackTraceElement[] stackTrace = exception.getStackTrace();
+        // 限制堆栈深度
+        if (stackTrace.length > 5) {
+            StackTraceElement[] limitedStackTrace = new StackTraceElement[5];
+            System.arraycopy(stackTrace, 0, limitedStackTrace, 0, 5);
+            exception.setStackTrace(limitedStackTrace);
+        }
         logger.error("Method: {} threw exception: {}",
                 joinPoint.getSignature().toShortString(),
-                exception.getMessage(), exception);
+                exception.getMessage(),exception);
     }
     private void saveSysLog(ProceedingJoinPoint joinPoint, long time) throws Throwable {
 

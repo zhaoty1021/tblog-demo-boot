@@ -32,7 +32,6 @@ public class LoginController {
     @PostMapping("/login")
     @SysLog("用户登录")
     public ResultResponse<User> login(@RequestParam String username, @RequestParam String password) {
-        System.out.println(username);
         // 调用登录服务
         User user = userService.login(username, password);
         if (user != null) {
