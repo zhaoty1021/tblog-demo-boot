@@ -22,7 +22,8 @@ public enum CodeEnum {
     /**系统相关错误码**/
     ERROR("500","系统异常，请稍后重试"),
     /*业务错误码**/
-    MISSING_PARAMETER("100001","缺少参数");
+    MISSING_PARAMETER("100001","缺少参数"),
+    LOGIN_ERROR("100002","用户名或密码错误");
 
     /**
      * code

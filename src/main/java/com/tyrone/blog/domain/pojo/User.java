@@ -1,9 +1,11 @@
-package com.tyrone.blog.domain;
+package com.tyrone.blog.domain.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,6 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8239370740328279056L;
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -38,10 +41,4 @@ public class User implements Serializable {
     private String registerAddress;
 
     private Date activateTime;
-
-    private Integer isDeleted;
-
-    private Date createTime;
-
-    private Date updateTime;
 }

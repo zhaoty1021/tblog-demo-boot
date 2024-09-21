@@ -1,7 +1,7 @@
 package com.tyrone.blog.controller;
 
 import com.tyrone.blog.annotation.SysLog;
-import com.tyrone.blog.domain.User;
+import com.tyrone.blog.domain.pojo.User;
 import com.tyrone.blog.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

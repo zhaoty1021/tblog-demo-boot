@@ -1,8 +1,11 @@
 package com.tyrone.blog.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tyrone.blog.domain.User;
+import com.tyrone.blog.converter.LoginConverter;
+import com.tyrone.blog.domain.dto.LoginDTO;
+import com.tyrone.blog.domain.pojo.User;
 import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
@@ -27,28 +30,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public void register(User user) {
+    public LoginDTO register(LoginDTO loginDTO) {
         // 使用 Optional 检查用户名是否为空
-        String username = Optional.ofNullable(user.getUsername())
+        String username = Optional.ofNullable(loginDTO.getUsername())
                 .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
         // 使用 Optional 检查密码是否为空
-        String password = Optional.ofNullable(user.getPassword())
+        String password = Optional.ofNullable(loginDTO.getPassword())
                 .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "password"));
         String encryptedPassword = passwordEncoder.encode(password); // 加密密码
-        user.setPassword(encryptedPassword);
-        System.out.println(encryptedPassword);
-        userMapper.insert(user);
+        loginDTO.setPassword(encryptedPassword);
+        userMapper.insert(LoginConverter.INSTANCE.loginDTOToUser(loginDTO));
+        return loginDTO;
     }
 
     @Override
-    public User login(String username, String password) {
+    public LoginDTO login(String username, String password) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return user;
+            StpUtil.login(user.getId());
+            return LoginConverter.INSTANCE.userTologinDTO(user);
+        }else{
+            throw new BizException(CodeEnum.LOGIN_ERROR);
         }
-        return null;
     }
 }
 

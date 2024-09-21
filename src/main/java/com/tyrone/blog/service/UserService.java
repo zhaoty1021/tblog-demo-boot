@@ -1,6 +1,7 @@
 package com.tyrone.blog.service;
 
-import com.tyrone.blog.domain.User;
+import com.tyrone.blog.domain.dto.LoginDTO;
+import com.tyrone.blog.domain.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public interface UserService extends IService<User> {
-    void register(User user);
-    User login(String username, String password);
+    LoginDTO register(LoginDTO loginDTO);
+    LoginDTO login(String username, String password);
 
 }
