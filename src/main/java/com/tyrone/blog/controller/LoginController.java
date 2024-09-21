@@ -1,6 +1,7 @@
 package com.tyrone.blog.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.tyrone.blog.annotation.IgnoreRestControllerResponse;
 import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.converter.LoginConverter;
 import com.tyrone.blog.domain.dto.LoginDTO;
@@ -60,5 +61,11 @@ public class LoginController {
             return ResultResponse.fail(e.getCode(), e.getMessage());// 注册失败
         }
 
+    }
+
+    @RequestMapping("/isLogin")
+    @IgnoreRestControllerResponse
+    public String isLogin() {
+        return "当前会话是否登录：" + StpUtil.isLogin();
     }
 }

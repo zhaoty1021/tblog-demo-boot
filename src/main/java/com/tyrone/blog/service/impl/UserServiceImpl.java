@@ -14,6 +14,7 @@ import com.tyrone.blog.service.UserService;
 import com.tyrone.blog.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -59,6 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
+    @Transactional
     public UserDTO updateUserInfo(UserDTO userDTO){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", userDTO.getUsername());
