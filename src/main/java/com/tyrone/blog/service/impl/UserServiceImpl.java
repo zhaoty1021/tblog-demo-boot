@@ -4,7 +4,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tyrone.blog.converter.LoginConverter;
+import com.tyrone.blog.converter.UserConverter;
 import com.tyrone.blog.domain.dto.LoginDTO;
+import com.tyrone.blog.domain.dto.UserDTO;
 import com.tyrone.blog.domain.pojo.User;
 import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
@@ -51,6 +53,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             StpUtil.login(user.getId());
             return LoginConverter.INSTANCE.userTologinDTO(user);
+        }else{
+            throw new BizException(CodeEnum.LOGIN_ERROR);
+        }
+    }
+
+    @Override
+    public UserDTO updateUserInfo(UserDTO userDTO){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", userDTO.getUsername());
+        User user = userMapper.selectOne(queryWrapper);
+        if (user != null && passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            userMapper.updateByUsername(UserConverter.INSTANCE.userDTOToUser(userDTO));
+            return userDTO;
         }else{
             throw new BizException(CodeEnum.LOGIN_ERROR);
         }

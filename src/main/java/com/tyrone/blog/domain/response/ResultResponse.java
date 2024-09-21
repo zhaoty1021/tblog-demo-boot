@@ -45,6 +45,9 @@ public class ResultResponse<T> implements Serializable {
     public static <T> ResultResponse<T> success(T data){
         return new ResultResponse<>(CodeEnum.SUCCESS.getCode(),CodeEnum.SUCCESS.getMessage(),data);
     }
+    public static <T> ResultResponse<T> success(T data, String message){
+        return new ResultResponse<>(CodeEnum.SUCCESS.getCode(),message,data);
+    }
 
     public static <T> ResultResponse<T> fail(){
         return new ResultResponse<>(CodeEnum.FAILURE.getCode(),CodeEnum.FAILURE.getMessage());

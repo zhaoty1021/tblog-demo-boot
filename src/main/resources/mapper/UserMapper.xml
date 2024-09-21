@@ -18,7 +18,20 @@
     <sql id="Base_Column_List">
         id,username,nickname,password,email,register_ip,registerAddress,activateTime,isDeleted,createTime,updateTime
     </sql>
-
+    <update id="updateByUsername" parameterType="map">
+        UPDATE t_user
+        <set>
+            <if test="user.email != null">
+                email = #{user.email},
+            </if>
+            <!-- 如果 password 不是空，则更新 password -->
+            <if test="user.nickname != null">
+                nickname = #{user.nickname}
+            </if>
+        </set>
+        WHERE
+            username = #{user.username}
+    </update>
 
 
 </mapper>

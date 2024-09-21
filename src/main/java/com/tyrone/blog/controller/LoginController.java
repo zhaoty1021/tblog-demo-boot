@@ -11,6 +11,9 @@ import com.tyrone.blog.domain.vo.LoginVO;
 import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
+import com.tyrone.blog.utils.IpUtil;
+import com.tyrone.blog.utils.LocationUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,9 +30,13 @@ public class LoginController {
     // 用户注册
     @PostMapping("/register")
     @SysLog("用户注册")
-    public ResultResponse<LoginVO> register(@RequestBody LoginDTO loginDTO) {
+    public ResultResponse<LoginVO> register(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
         // 调用注册服务
         try {
+            String ip = IpUtil.getIpAddr(request);
+            loginDTO.setRegisterIp(ip);
+            String location = LocationUtil.getLocationByIp(ip);
+            loginDTO.setRegisterAddress(location);
             return ResultResponse.success(LoginConverter.INSTANCE.loginDTOToLoginVO(userService.register(loginDTO)));// 注册成功
         }catch (BizException e){
             return ResultResponse.fail(e.getCode(), e.getMessage());// 注册失败
