@@ -1,0 +1,48 @@
+package com.tyrone.blog.aspect;
+
+import com.google.common.util.concurrent.RateLimiter;
+import com.tyrone.blog.annotation.RateLimit;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
+/**
+ * @author yingxiu.zty
+ * @createTime on 2024/9/23
+ * @description
+ */
+@Aspect
+@Component
+public class RateLimiterAspect {
+
+    private final ConcurrentHashMap<String, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
+
+    private RateLimiter rateLimiter; // 默认的RateLimiter配置，用于方法中没有指定RateLimiter Bean的名称时
+
+    @Around("@annotation(com.tyrone.blog.annotation.RateLimit)")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        RateLimit rateLimit = method.getAnnotation(RateLimit.class);
+        if (rateLimit != null) {
+            double value = rateLimit.LimitNum();
+
+            // 根据注解的值获取对应的RateLimiter
+            RateLimiter limiter = rateLimiterMap.computeIfAbsent(
+                    signature.toLongString(),
+                    k -> RateLimiter.create(value)
+            );
+
+            // 尝试获取令牌，无法获取则抛出异常
+            if (!limiter.tryAcquire()) {
+                throw new RuntimeException("Too many requests, please try again later.");
+            }
+        }
+
+        return joinPoint.proceed(); // 执行目标方法
+    }
+}
