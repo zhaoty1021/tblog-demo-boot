@@ -5,6 +5,8 @@ import com.tyrone.blog.annotation.RateLimit;
 import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.enums.RateLimitType;
 import com.tyrone.blog.exceptions.BizException;
+import com.tyrone.blog.utils.IpUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,6 +29,8 @@ public class RateLimiterAspect {
 
     private RateLimiter rateLimiter; // 默认的RateLimiter配置，用于方法中没有指定RateLimiter Bean的名称时
 
+    private HttpServletRequest request;
+
     @Pointcut("@annotation(com.tyrone.blog.annotation.RateLimit)")
     public void rateLimit() {
 
@@ -42,15 +46,32 @@ public class RateLimiterAspect {
             RateLimitType type = rateLimit.type();
 
             // 根据注解的值获取对应的RateLimiter
-            RateLimiter limiter = rateLimiterMap.computeIfAbsent(
-                    signature.toLongString(),
-                    k -> RateLimiter.create(value)
-            );
-
-            // 尝试获取令牌，无法获取则抛出异常
-            if (!limiter.tryAcquire()) {
-                throw new BizException(CodeEnum.RATE_LIMIT_ERROR);
+            if(type.equals(RateLimitType.DEFAULT)){
+                RateLimiter limiter = rateLimiterMap.computeIfAbsent(
+                        signature.toLongString(),
+                        k -> RateLimiter.create(value)
+                );
+                // 尝试获取令牌，无法获取则抛出异常
+                if (!limiter.tryAcquire()) {
+                    throw new BizException(CodeEnum.RATE_LIMIT_ERROR);
+                }
+            }else{
+                if(type.equals(RateLimitType.IP)){
+                    String ip = IpUtil.getIpAddr(request);
+                    String key = ip + ":" + signature.getMethod().getName();
+                    RateLimiter limiter = rateLimiterMap.computeIfAbsent(
+                            key,
+                            k -> RateLimiter.create(value)
+                    );
+                    if (!limiter.tryAcquire()) {
+                        throw new BizException(CodeEnum.RATE_LIMIT_ERROR);
+                    }
+                }
             }
+
+
+
+
         }
 
         return joinPoint.proceed(); // 执行目标方法

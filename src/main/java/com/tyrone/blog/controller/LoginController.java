@@ -6,11 +6,10 @@ import com.tyrone.blog.annotation.RateLimit;
 import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.converter.LoginConverter;
 import com.tyrone.blog.domain.dto.LoginDTO;
-import com.tyrone.blog.domain.dto.UserDTO;
-import com.tyrone.blog.domain.pojo.User;
 import com.tyrone.blog.domain.response.ResultResponse;
 import com.tyrone.blog.domain.vo.LoginVO;
 import com.tyrone.blog.enums.CodeEnum;
+import com.tyrone.blog.enums.RateLimitType;
 import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
 import com.tyrone.blog.utils.IpUtil;
@@ -47,7 +46,7 @@ public class LoginController {
     // 用户登录
     @PostMapping("/login")
     @SysLog("用户登录")
-    @RateLimit(LimitNum = 2)
+    @RateLimit(LimitNum = 0.5,type = RateLimitType.IP)
     public ResultResponse<LoginVO> login(@RequestParam String username, @RequestParam String password) {
         // 调用登录服务
         LoginDTO loginDTO = userService.login(username, password);
