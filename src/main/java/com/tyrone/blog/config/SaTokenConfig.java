@@ -19,9 +19,9 @@ public class SaTokenConfig implements WebMvcConfigurer {
         // 注册 Sa-Token 拦截器，打开注解式鉴权功能
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
                 //所有接口都会检查是否登录了
-                .addPathPatterns("/**")
+                .addPathPatterns("/api/**")
                 //以下接口不检查，直接放行
-                .excludePathPatterns("/api/login","/api/logout","/api/register");
+                .excludePathPatterns("/api/login");
 
     }
 }

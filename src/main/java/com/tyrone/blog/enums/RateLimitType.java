@@ -6,8 +6,13 @@ package com.tyrone.blog.enums;
  * @description 限流类型枚举类
  */
 public enum RateLimitType {
+    /**
+     * 按照总体流量
+     */
+    DEFAULT,
+    /**
+     * 按IP限流
+     */
     IP,
-    USER_ID,
-    HEADER,
     CUSTOM // 可以根据需要扩展更多类型
 }

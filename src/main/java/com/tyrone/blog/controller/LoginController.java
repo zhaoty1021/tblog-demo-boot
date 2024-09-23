@@ -2,6 +2,7 @@ package com.tyrone.blog.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.tyrone.blog.annotation.IgnoreRestControllerResponse;
+import com.tyrone.blog.annotation.RateLimit;
 import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.converter.LoginConverter;
 import com.tyrone.blog.domain.dto.LoginDTO;
@@ -46,6 +47,7 @@ public class LoginController {
     // 用户登录
     @PostMapping("/login")
     @SysLog("用户登录")
+    @RateLimit(LimitNum = 2)
     public ResultResponse<LoginVO> login(@RequestParam String username, @RequestParam String password) {
         // 调用登录服务
         LoginDTO loginDTO = userService.login(username, password);
@@ -58,7 +60,7 @@ public class LoginController {
                 return ResultResponse.fail(CodeEnum.FAILURE.getCode(), "用户名或密码不正确");// 登录失败
             }
         }catch (BizException e){
-            return ResultResponse.fail(e.getCode(), e.getMessage());// 注册失败
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 登录
         }
 
     }

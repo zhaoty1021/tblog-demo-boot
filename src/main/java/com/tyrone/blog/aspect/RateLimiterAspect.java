@@ -2,9 +2,13 @@ package com.tyrone.blog.aspect;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.tyrone.blog.annotation.RateLimit;
+import com.tyrone.blog.enums.CodeEnum;
+import com.tyrone.blog.enums.RateLimitType;
+import com.tyrone.blog.exceptions.BizException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +27,19 @@ public class RateLimiterAspect {
 
     private RateLimiter rateLimiter; // 默认的RateLimiter配置，用于方法中没有指定RateLimiter Bean的名称时
 
-    @Around("@annotation(com.tyrone.blog.annotation.RateLimit)")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Pointcut("@annotation(com.tyrone.blog.annotation.RateLimit)")
+    public void rateLimit() {
+
+    }
+
+    @Around("rateLimit()")
+    public Object pointcut(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         RateLimit rateLimit = method.getAnnotation(RateLimit.class);
         if (rateLimit != null) {
             double value = rateLimit.LimitNum();
+            RateLimitType type = rateLimit.type();
 
             // 根据注解的值获取对应的RateLimiter
             RateLimiter limiter = rateLimiterMap.computeIfAbsent(
@@ -39,7 +49,7 @@ public class RateLimiterAspect {
 
             // 尝试获取令牌，无法获取则抛出异常
             if (!limiter.tryAcquire()) {
-                throw new RuntimeException("Too many requests, please try again later.");
+                throw new BizException(CodeEnum.RATE_LIMIT_ERROR);
             }
         }
 

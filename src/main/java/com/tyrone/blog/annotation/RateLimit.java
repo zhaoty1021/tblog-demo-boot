@@ -15,6 +15,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) // 运行时保持
 public @interface RateLimit {
     double LimitNum() default  10;      //默认每秒产生10个令牌
-    RateLimitType type();
+    /**
+     * 超时时长
+     */
+    int timeout() default 0;
+
+    RateLimitType type() default RateLimitType.DEFAULT;
 }
 
