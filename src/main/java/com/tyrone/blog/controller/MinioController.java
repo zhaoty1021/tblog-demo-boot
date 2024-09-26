@@ -35,4 +35,13 @@ public class MinioController {
             return ResultResponse.error(e);
         }
     }
+
+    @PostMapping(value = "/download")
+    public ResultResponse upload(@RequestParam String fileName){
+        try {
+            return ResultResponse.success(minioService.downloadFile(fileName), "下载成功");
+        }catch (BizException e){
+            return ResultResponse.error(e);
+        }
+    }
 }
