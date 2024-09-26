@@ -27,7 +27,15 @@ public enum CodeEnum {
     OUTSIDE_API_ERROR("100003","外部API调用失败"),
 
     /* 限流 **/
-    RATE_LIMIT_ERROR("200001","操作过于频繁，请稍后重试");
+    RATE_LIMIT_ERROR("200001","操作过于频繁，请稍后重试"),
+
+    /* minio相关 */
+    BUCKET_NOT_EXIST("300001", "minio的bucket不存在"),
+    UPLOAD_FILE_ERROR("300002", "上传文件失败"),
+    DOWNLOAD_FILE_ERROR("300003", "下载文件失败"),
+    GET_FILE_URL_ERROR("300004", "获取文件url失败");
+
+
 
 
     /**

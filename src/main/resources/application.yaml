@@ -63,3 +63,8 @@ sa-token:
   jwt-secret-key: ejqsadascwedia
   # 是否输出操作日志
   is-log: true
+minio:
+  endpoint: http://124.70.85.121:9000
+  access-key: pnrTeTtnAFyXCRKr0bYf
+  secret-key: ZHKEU1ll82PwVg2rANU2AWgHFj5MDSMCGMFctlPy
+  bucket-name: t-blog

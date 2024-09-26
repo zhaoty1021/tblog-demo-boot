@@ -136,6 +136,12 @@
 			<artifactId>guava</artifactId>
 			<version>32.0.0-android</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.minio/minio -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.5.12</version>
+		</dependency>
 
 
 
