@@ -26,7 +26,7 @@ spring:
     redis:
       host: 124.70.85.121
       port: 6379
-      password:
+      password: Zhao1025338
       timeout: 6000ms
       lettuce:
         pool:
@@ -43,8 +43,8 @@ mybatis-plus:
 sa-token:
   # token名称 (同时也是cookie名称)
   token-name: Authorization
-  # token有效期 设为一天 (必定过期) 单位: 秒
-  timeout: 86400
+  # token有效期 设为3600 (必定过期) 单位: 秒
+  timeout: 3600
   # token最低活跃时间 (指定时间无操作就过期) 单位: 秒
   active-timeout: 1800
   # 允许动态设置 token 有效期
@@ -63,8 +63,85 @@ sa-token:
   jwt-secret-key: ejqsadascwedia
   # 是否输出操作日志
   is-log: true
+  alone-redis:
+    # Redis数据库索引 (默认为0)
+    database: 2
+    # Redis服务器地址
+    host: 124.70.85.121
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: Zhao1025338
+    # 连接超时时间
+    timeout: 10s
 minio:
   endpoint: http://124.70.85.121:9000
   access-key: pnrTeTtnAFyXCRKr0bYf
   secret-key: ZHKEU1ll82PwVg2rANU2AWgHFj5MDSMCGMFctlPy
   bucket-name: t-blog
+# Swagger配置
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.tyrone.blog.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  # 配置Knife4j的展示细节和功能开关
+  setting:
+    # 设置界面语言
+    language: zh-CN
+    # 启用Swagger模型展示
+    enable-swagger-models: true
+    # 启用文档管理功能
+    enable-document-manage: true
+    # 设置Swagger模型的显示名称
+    swagger-model-name: 实体类列表
+    # 是否显示版本信息
+    enable-version: false
+    # 是否启用参数缓存刷新
+    enable-reload-cache-parameter: false
+    # 启用后端脚本支持
+    enable-after-script: true
+    # 过滤特定方法类型的multipart/form-data接口
+    enable-filter-multipart-api-method-type: POST
+    # 是否过滤所有multipart/form-data类型的接口
+    enable-filter-multipart-apis: false
+    # 启用请求缓存
+    enable-request-cache: true
+    # 是否启用搜索功能
+    enable-search: false
+    # 是否显示页脚
+    enable-footer: false
+    # 启用自定义页脚内容
+    enable-footer-custom: true
+    # 设置自定义页脚的内容
+    footer-custom-content: Apache License 2.0 | Copyright 2019-[浙江八一菜刀股份有限公司](https://gitee.com/xiaoym/knife4j)
+    # 是否启用动态参数
+    enable-dynamic-parameter: false
+    # 启用调试模式
+    enable-debug: true
+    # 启用OpenAPI 3.0的支持
+    enable-open-api: false
+    # 启用接口分组功能
+    enable-group: true
+  # 是否启用CORS跨域支持
+  cors: false
+  # 是否启用生产模式
+  production: false
+  # 配置基本的认证信息
+  basic:
+    # 启用基本认证
+    enable: false
+    # 设置用户名
+    username: test
+    # 设置密码
+    password: 12313

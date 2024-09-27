@@ -21,7 +21,14 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 //所有接口都会检查是否登录了
                 .addPathPatterns("/api/**")
                 //以下接口不检查，直接放行
-                .excludePathPatterns("/api/**");
+                .excludePathPatterns("/**/doc.*",
+                        "/**/swagger-ui.*",
+                        "/**/swagger-resources",
+                        "/**/webjars/**",
+                        "/**/v2/api-docs/**",
+                        "/api/register",
+                        "/api/login");
+
 
     }
 }

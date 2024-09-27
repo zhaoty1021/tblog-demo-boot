@@ -55,7 +55,7 @@ public class MinioService {
      * @param file 文件
      * @return List<String> 文件名集合
      */
-    public boolean uploadFile(MultipartFile file){
+    public boolean uploadFile(MultipartFile file, String dir){
         try {
             // 检查存储桶是否存在
             if(!existBucket(bucketName)){
@@ -65,7 +65,7 @@ public class MinioService {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(file.getOriginalFilename())
+                            .object(dir + file.getOriginalFilename())
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()

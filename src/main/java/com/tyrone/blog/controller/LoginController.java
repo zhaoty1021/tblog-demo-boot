@@ -14,6 +14,11 @@ import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
 import com.tyrone.blog.utils.IpUtil;
 import com.tyrone.blog.utils.LocationUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +30,14 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "登录注册")
 public class LoginController {
     @Resource
     private UserService userService;
     // 用户注册
     @PostMapping("/register")
     @SysLog("用户注册")
+    @Operation(summary = "用户注册")
     public ResultResponse<LoginVO> register(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
         // 调用注册服务
         try {
@@ -47,6 +54,7 @@ public class LoginController {
     @PostMapping("/login")
     @SysLog("用户登录")
     @RateLimit(LimitNum = 0.5,type = RateLimitType.IP)
+    @Operation(summary = "用户登录")
     public ResultResponse<LoginVO> login(@RequestParam String username, @RequestParam String password) {
         // 调用登录服务
         LoginDTO loginDTO = userService.login(username, password);
@@ -64,9 +72,4 @@ public class LoginController {
 
     }
 
-    @RequestMapping("/isLogin")
-    @IgnoreRestControllerResponse
-    public String isLogin() {
-        return "当前会话是否登录：" + StpUtil.isLogin();
-    }
 }
