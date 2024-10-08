@@ -73,7 +73,7 @@ sa-token:
     # Redis服务器连接密码（默认为空）
     password: Zhao1025338
     # 连接超时时间
-    timeout: 10s
+    timeout: 100s
 minio:
   endpoint: http://124.70.85.121:9000
   access-key: pnrTeTtnAFyXCRKr0bYf

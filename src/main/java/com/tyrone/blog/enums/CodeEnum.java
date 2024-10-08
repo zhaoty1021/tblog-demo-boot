@@ -33,7 +33,17 @@ public enum CodeEnum {
     BUCKET_NOT_EXIST("300001", "minio的bucket不存在"),
     UPLOAD_FILE_ERROR("300002", "上传文件失败"),
     DOWNLOAD_FILE_ERROR("300003", "下载文件失败"),
-    GET_FILE_URL_ERROR("300004", "获取文件url失败");
+    GET_FILE_URL_ERROR("300004", "获取文件url失败"),
+
+    /** redis 错误码 **/
+    REDIS_UNKNOWN_ERROR("400001", "Redis未知错误"),
+    REDIS_CONNECTION_ERROR("400002", "Redis连接错误"),
+    REDIS_OPERATION_ERROR("400003", "Redis操作错误"),
+    REDIS_KEY_NOT_FOUND("400004", "Redis键不存在"),
+    REDIS_DATA_TYPE_ERROR("400005", "Redis数据类型错误"),
+    REDIS_SERIALIZATION_ERROR("400006", "Redis序列化/反序列化错误");
+
+
 
 
 
