@@ -27,4 +27,8 @@ public class LoginVO implements Serializable {
     private String registerIp;
 
     private String registerAddress;
+
+    private String tokenName;
+
+    private String tokenValue;
 }

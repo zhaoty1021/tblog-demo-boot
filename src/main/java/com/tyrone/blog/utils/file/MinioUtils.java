@@ -1,4 +1,4 @@
-package com.tyrone.blog.service;
+package com.tyrone.blog.utils.file;
 
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.tyrone.blog.enums.CodeEnum;
@@ -24,11 +24,11 @@ import java.util.Arrays;
 
 /**
  * @author yingxiu.zty
- * @createTime on 2024/9/26
+ * @createTime on 2024/10/10
  * @description
  */
 @Service
-public class MinioService {
+public class MinioUtils {
     @Value("${minio.bucket-name}")
     private String bucketName;
 
@@ -141,3 +141,4 @@ public class MinioService {
         }
     }
 }
+

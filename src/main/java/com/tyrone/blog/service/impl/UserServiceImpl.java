@@ -1,5 +1,6 @@
 package com.tyrone.blog.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -52,7 +53,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("username", username);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            StpUtil.login(user.getId());
             return LoginConverter.INSTANCE.userTologinDTO(user);
         }else{
             throw new BizException(CodeEnum.LOGIN_ERROR);

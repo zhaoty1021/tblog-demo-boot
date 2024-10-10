@@ -1,7 +1,7 @@
 package com.tyrone.blog.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.tyrone.blog.annotation.IgnoreRestControllerResponse;
 import com.tyrone.blog.annotation.RateLimit;
 import com.tyrone.blog.annotation.SysLog;
 import com.tyrone.blog.converter.LoginConverter;
@@ -15,9 +15,6 @@ import com.tyrone.blog.service.UserService;
 import com.tyrone.blog.utils.IpUtil;
 import com.tyrone.blog.utils.LocationUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +58,10 @@ public class LoginController {
         try {
             if (loginDTO != null) {
                 LoginVO loginVO = LoginConverter.INSTANCE.loginDTOToLoginVO(loginDTO);
+                StpUtil.login(loginDTO.getUsername());
+                SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+                loginVO.setTokenName(tokenInfo.getTokenName());
+                loginVO.setTokenValue(tokenInfo.getTokenValue());
                 return ResultResponse.success(loginVO);// 登录成功
                 // 登录成功
             } else {

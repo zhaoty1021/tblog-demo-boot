@@ -59,8 +59,6 @@ sa-token:
   is-read-cookie: false
   # token前缀
   token-prefix: "Bearer"
-  # jwt秘钥
-  jwt-secret-key: ejqsadascwedia
   # 是否输出操作日志
   is-log: true
   alone-redis:
