@@ -31,7 +31,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
 
 
     @Override
-    public boolean addRole(RoleDTO roleDTO) {
+    public RoleDTO addRole(RoleDTO roleDTO) {
+        // 使用 Optional 检查roleCode是否为空
+        String roleCode = Optional.ofNullable(roleDTO.getRoleCode())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "roleCode"));
         // 使用 Optional 检查roleName是否为空
         String roleName = Optional.ofNullable(roleDTO.getRoleName())
                 .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "roleName"));
@@ -39,9 +42,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
         String description = Optional.ofNullable(roleDTO.getDescription())
                 .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "description"));
         if(roleMapper.insert(RoleConverter.INSTANCE.roleDTOToRole(roleDTO))==1){
-            return true;
-        };
-        return false;
+            return roleDTO;
+        }else{
+            throw new BizException(CodeEnum.ERROR,"添加角色失败");
+        }
     }
 
     @Override
@@ -55,6 +59,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
                     RoleDTO roleDTO = new RoleDTO();
                     roleDTO.setRoleName(role.getRoleName());
                     roleDTO.setDescription(role.getDescription());
+                    roleDTO.setRoleCode(role.getRoleCode());
                     // 设置其他字段...
                     return roleDTO;
                 })

@@ -23,6 +23,11 @@ public class Role implements Serializable {
     private Long id;
 
     /**
+     * 角色编码
+     */
+    private String roleCode;
+
+    /**
      * 角色名称
      */
     private String roleName;

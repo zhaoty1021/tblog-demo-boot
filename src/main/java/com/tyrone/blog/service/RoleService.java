@@ -17,7 +17,7 @@ public interface RoleService extends IService<Role> {
      * 添加角色
      * @param roleDTO 角色DTO
      */
-    boolean addRole(RoleDTO roleDTO);
+    RoleDTO addRole(RoleDTO roleDTO);
 
     /**
      * 查询全部角色

@@ -6,6 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.tyrone.blog.domain.pojo.Role">
             <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
             <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -14,7 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,role_name,description,
+        id,role_code,role_name,description,
         create_time,update_time,is_deleted
     </sql>
 </mapper>

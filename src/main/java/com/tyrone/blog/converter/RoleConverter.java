@@ -2,8 +2,11 @@ package com.tyrone.blog.converter;
 
 import com.tyrone.blog.domain.dto.RoleDTO;
 import com.tyrone.blog.domain.pojo.Role;
+import com.tyrone.blog.domain.vo.RoleVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @author yingxiu.zty
@@ -22,5 +25,7 @@ public interface RoleConverter {
     Role roleDTOToRole(RoleDTO roleDTO);
 
     // dto -> vo
-    // UserVO userDTOToUserVO(UserDTO userDTO);
+    RoleVO roleDTOToRoleVO(RoleDTO roleDTO);
+
+    List<RoleVO> roleDTOListToRoleVOList(List<RoleDTO> roleDTOList);
 }

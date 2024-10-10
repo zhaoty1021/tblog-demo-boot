@@ -1,4 +1,4 @@
-package com.tyrone.blog.domain.dto;
+package com.tyrone.blog.domain.vo;
 
 import lombok.Data;
 
@@ -7,14 +7,14 @@ import java.io.Serializable;
 
 /**
  * @author yingxiu.zty
- * @createTime on 2024/10/10
+ * @createTime on 2024/10/11
  * @description
  */
 @Data
-public class RoleDTO implements Serializable {
+public class RoleVO implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -931828959714831334L;
+    private static final long serialVersionUID = 5522909219413024098L;
 
     private String roleCode;
     private String roleName;
