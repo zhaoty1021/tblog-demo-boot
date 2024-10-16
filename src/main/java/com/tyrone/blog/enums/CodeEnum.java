@@ -26,6 +26,7 @@ public enum CodeEnum {
     LOGIN_ERROR("100002","用户名或密码错误"),
     OUTSIDE_API_ERROR("100003","外部API调用失败"),
     DATA_NOT_EXIST("100004","数据不存在"),
+    LOGIN_TOKEN_ERROR("100005","登录令牌错误"),
 
     /* 限流 **/
     RATE_LIMIT_ERROR("200001","操作过于频繁，请稍后重试"),

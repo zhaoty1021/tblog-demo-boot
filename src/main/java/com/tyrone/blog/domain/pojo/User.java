@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -34,11 +35,21 @@ public class User implements Serializable {
 
     private String password;
 
+    private int sex;
+
     private String email;
+
+    private String phone;
+
+    private String avatar;
 
     private String registerIp;
 
     private String registerAddress;
 
-    private Date activateTime;
+    private LocalDateTime activateTime;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
 }

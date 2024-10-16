@@ -1,6 +1,8 @@
 package com.tyrone.blog.aspect;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.tyrone.blog.domain.response.ResultResponse;
+import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,5 +24,9 @@ public class GlobalExceptionHandler {
         // 记录异常日志
 
         return ResultResponse.error(e);
+    }
+    @ExceptionHandler(NotLoginException.class)
+    public ResultResponse<String> handleNotLoginException(NotLoginException e) {
+        return ResultResponse.fail(CodeEnum.LOGIN_TOKEN_ERROR.getCode(),e.getMessage());
     }
 }

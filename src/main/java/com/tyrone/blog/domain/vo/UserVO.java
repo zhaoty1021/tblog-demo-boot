@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author yingxiu.zty
@@ -19,7 +20,17 @@ public class UserVO implements Serializable{
 
     private String email;
 
+    private int sex;
+
+    private String phone;
+
+    private String avatar;
+
     private String registerIp;
 
     private String registerAddress;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
 }
