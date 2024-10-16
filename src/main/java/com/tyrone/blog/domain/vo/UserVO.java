@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @createTime on 2024/9/22
  */
 @Data
-public class UserVO implements Serializable {
+public class UserVO implements Serializable{
     @Serial
     private static final long serialVersionUID = 2354394099803612660L;
     private String username;

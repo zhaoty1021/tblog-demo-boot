@@ -3,12 +3,15 @@ package com.tyrone.blog.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tyrone.blog.converter.LoginConverter;
 import com.tyrone.blog.converter.UserConverter;
 import com.tyrone.blog.domain.dto.LoginDTO;
 import com.tyrone.blog.domain.dto.UserDTO;
 import com.tyrone.blog.domain.pojo.User;
+import com.tyrone.blog.domain.response.Pagination;
+import com.tyrone.blog.domain.vo.UserVO;
 import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.UserService;
@@ -18,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
 * @author zhaot
@@ -71,6 +76,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }else{
             throw new BizException(CodeEnum.LOGIN_ERROR);
         }
+    }
+
+    @Override
+    public Pagination<UserVO> listUsersByPage(int currentPage, int pageSize) {
+        // 创建分页对象
+        Page<User> page = new Page<>(currentPage, pageSize);
+        page = (Page<User>) userMapper.selectPage(page, new QueryWrapper<>());
+        Pagination<UserVO> pagination = new Pagination<>();
+        List<UserVO> userVOs = UserConverter.INSTANCE.usersToUserVOs(page.getRecords());
+        pagination.setCurrent(page.getCurrent());
+        pagination.setSize(page.getSize());
+        pagination.setTotal(page.getTotal());
+        pagination.setRecords(userVOs);
+        return pagination;
     }
 }
 

@@ -8,6 +8,8 @@ import com.tyrone.blog.domain.vo.UserVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author yingxiu.zty
  * @createTime on 2024/9/22
@@ -25,4 +27,9 @@ public interface UserConverter {
 
     // dto -> vo
     UserVO userDTOToUserVO(UserDTO userDTO);
+
+    // po -> vo
+    UserVO userToUserVO(User user);
+
+    List<UserVO> usersToUserVOs(List<User> users);
 }

@@ -1,9 +1,13 @@
 package com.tyrone.blog.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tyrone.blog.domain.dto.LoginDTO;
 import com.tyrone.blog.domain.dto.UserDTO;
+import com.tyrone.blog.domain.dto.TPage;
 import com.tyrone.blog.domain.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tyrone.blog.domain.response.Pagination;
+import com.tyrone.blog.domain.vo.UserVO;
 import org.springframework.stereotype.Service;
 
 
@@ -33,6 +37,13 @@ public interface UserService extends IService<User> {
      * @return userDTO 登录DTO
      */
     UserDTO updateUserInfo(UserDTO userDTO);
+    /**
+     * 获取分页用户列表，currentPage表示当前页数，pageSize表示每页显示的记录条数
+     * @param currentPage 当前页数
+     * @param pageSize 每页显示的记录条数
+     * @return Page
+     */
+    Pagination<UserVO> listUsersByPage(int currentPage, int pageSize);
 
 
 
