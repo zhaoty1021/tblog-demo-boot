@@ -24,4 +24,17 @@ public interface RoleService extends IService<Role> {
      * @return List
      */
     List<RoleDTO> listRoles();
+
+    /**
+     * 更新角色
+     * @param roleDTO 角色DTO
+     * @return 角色
+     */
+    boolean updateRole(RoleDTO roleDTO);
+
+    /**
+     * 删除角色
+     * @param roleCode 角色编码
+     */
+    boolean deleteRole(String roleCode);
 }

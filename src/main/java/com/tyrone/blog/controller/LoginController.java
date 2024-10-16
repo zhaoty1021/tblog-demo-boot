@@ -52,9 +52,8 @@ public class LoginController {
     @SysLog("用户登录")
     @RateLimit(LimitNum = 0.5,type = RateLimitType.IP)
     @Operation(summary = "用户登录")
-    public ResultResponse<LoginVO> login(@RequestParam String username, @RequestParam String password) {
+    public ResultResponse<LoginVO> login(@RequestBody LoginDTO loginDTO) {
         // 调用登录服务
-        LoginDTO loginDTO = userService.login(username, password);
         try {
             if (loginDTO != null) {
                 LoginVO loginVO = LoginConverter.INSTANCE.loginDTOToLoginVO(loginDTO);

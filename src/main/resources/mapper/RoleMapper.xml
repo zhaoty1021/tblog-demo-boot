@@ -18,4 +18,21 @@
         id,role_code,role_name,description,
         create_time,update_time,is_deleted
     </sql>
+    <update id="updateByCode">
+        UPDATE t_role
+        <set>
+            role_name = #{role.roleName},
+            description = #{role.description}
+        </set>
+        WHERE
+            role_code = #{role.roleCode}
+    </update>
+    <update id="deleteByRoleCode">
+        UPDATE t_role
+        <set>
+            is_deleted = 1
+        </set>
+        WHERE
+        role_code = #{role.roleCode}
+    </update>
 </mapper>

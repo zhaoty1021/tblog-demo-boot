@@ -48,7 +48,28 @@ public class RoleController {
         }catch (BizException e){
             return ResultResponse.fail(e.getCode(), e.getMessage());// 插入失败
         }
-
+    }
+    @PostMapping("/update")
+    @SaCheckLogin
+    @Operation(summary = "更新角色")
+    public ResultResponse updateRole(@RequestBody RoleDTO roleDTO) {
+        try {
+            boolean update = roleService.updateRole(roleDTO);
+            return ResultResponse.success(update,"更新完成");
+        }catch (BizException e){
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 更新失败
+        }
+    }
+    @PostMapping("/delete")
+    @SaCheckLogin
+    @Operation(summary = "删除角色")
+    public ResultResponse deleteRole(@RequestBody RoleDTO roleDTO) {
+        try {
+            boolean delete = roleService.deleteRole(roleDTO.getRoleCode());
+            return ResultResponse.success(delete,"删除完成");
+        }catch (BizException e){
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 删除失败
+        }
     }
 
 

@@ -9,7 +9,6 @@ import com.tyrone.blog.enums.CodeEnum;
 import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.service.RoleService;
 import com.tyrone.blog.mapper.RoleMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -51,7 +50,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     @Override
     public List<RoleDTO> listRoles() {
         // 使用 MyBatis-Plus 查询 Role 列表
-        List<Role> roleList = roleMapper.selectList(new QueryWrapper<>());
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_deleted", 0);
+        List<Role> roleList = roleMapper.selectList(queryWrapper);
+
 
         // 使用 Stream API 将 Role 列表转换为 RoleDTO 列表
         return roleList.stream()
@@ -64,6 +66,44 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
                     return roleDTO;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean updateRole(RoleDTO roleDTO) {
+        // 使用 Optional 检查roleCode是否为空
+        String roleCode = Optional.ofNullable(roleDTO.getRoleCode())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "roleCode"));
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_code", roleCode);
+        if(roleMapper.selectOne(queryWrapper) == null){
+            throw new BizException(CodeEnum.DATA_NOT_EXIST,"角色不存在");
+        }
+        // 使用 Optional 检查roleName是否为空
+        String roleName = Optional.ofNullable(roleDTO.getRoleName())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "roleName"));
+        // 使用 Optional 检查描述是否为空
+        String description = Optional.ofNullable(roleDTO.getDescription())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "description"));
+        Role role = RoleConverter.INSTANCE.roleDTOToRole(roleDTO);
+        if(roleMapper.updateByCode(role)==1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteRole(String roleCode) {
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_code", roleCode);
+        Role role = Optional.ofNullable(roleMapper.selectOne(queryWrapper))
+                .orElseThrow(() -> new BizException(CodeEnum.DATA_NOT_EXIST,"角色不存在"));
+        role.setIsDeleted(1);
+        if(roleMapper.deleteByRoleCode(role)==1){
+            return true;
+        }else {
+            return false;
+        }
     }
 }
 

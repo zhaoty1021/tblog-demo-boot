@@ -3,6 +3,7 @@ package com.tyrone.blog.mapper;
 import com.tyrone.blog.domain.pojo.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author zhaotianyu3
@@ -13,6 +14,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
+    int updateByCode(@Param("role") Role role);
+
+    int deleteByRoleCode(@Param("role") Role role);
 }
 
 
