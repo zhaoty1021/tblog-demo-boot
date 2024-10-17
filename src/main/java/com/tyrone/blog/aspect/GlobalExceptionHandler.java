@@ -29,4 +29,9 @@ public class GlobalExceptionHandler {
     public ResultResponse<String> handleNotLoginException(NotLoginException e) {
         return ResultResponse.fail(CodeEnum.LOGIN_TOKEN_ERROR.getCode(),e.getMessage());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResultResponse<String> handleException(Exception e) {
+        return ResultResponse.error(e);
+    }
 }

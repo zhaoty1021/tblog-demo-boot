@@ -46,6 +46,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 使用 Optional 检查密码是否为空
         String password = Optional.ofNullable(loginDTO.getPassword())
                 .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "password"));
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user != null) {
+            throw new BizException(CodeEnum.USERNAME_EXIST);
+        }
         String encryptedPassword = passwordEncoder.encode(password); // 加密密码
         loginDTO.setPassword(encryptedPassword);
         userMapper.insert(LoginConverter.INSTANCE.loginDTOToUser(loginDTO));
@@ -66,7 +73,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     @Transactional
-    public UserDTO updateUserInfo(UserDTO userDTO){
+    public UserDTO updatePassword(UserDTO userDTO){
+        // 使用 Optional 检查密码是否为空
+        String password = Optional.ofNullable(userDTO.getPassword())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "password"));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", userDTO.getUsername());
         User user = userMapper.selectOne(queryWrapper);
@@ -91,6 +101,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         pagination.setRecords(userVOs);
         return pagination;
     }
+
+    @Override
+    public UserDTO getUserInfoByUsername(String username) {
+        // 使用 Optional 检查用户名是否为空
+        Optional.ofNullable(username).orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = userMapper.selectOne(queryWrapper);
+        return UserConverter.INSTANCE.userTouserDTO(user);
+    }
+
+    @Override
+    public UserDTO updateUserInfo(UserDTO userDTO) {
+        // 使用 Optional 检查用户名是否为空
+        String username = Optional.ofNullable(userDTO.getUsername())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
+        userMapper.updateByUsername(UserConverter.INSTANCE.userDTOToUser(userDTO));
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO addUser(UserDTO userDTO) {
+        // 使用 Optional 检查用户名是否为空
+        String username = Optional.ofNullable(userDTO.getUsername())
+                .orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user != null) {
+            throw new BizException(CodeEnum.USERNAME_EXIST);
+        }
+        userMapper.insert(UserConverter.INSTANCE.userDTOToUser(userDTO));
+        return userDTO;
+    }
+
 }
 
 

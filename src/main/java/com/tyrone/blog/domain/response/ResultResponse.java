@@ -63,4 +63,7 @@ public class ResultResponse<T> implements Serializable {
     public static <T> ResultResponse<T> error(BizException e){
         return new ResultResponse<>(e.getCode(),e.getMessage());
     }
+    public static <T> ResultResponse<T> error(Exception e){
+        return new ResultResponse<>(CodeEnum.ERROR.getCode(),CodeEnum.ERROR.getCode()+":"+e.getMessage());
+    }
 }

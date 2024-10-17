@@ -29,9 +29,22 @@
                 email = #{user.email},
             </if>
             <!-- 如果 password 不是空，则更新 password -->
-            <if test="user.nickname != null">
-                nickname = #{user.nickname}
+            <if test="user.password != null">
+                password = #{user.password},
             </if>
+            <if test="user.nickname != null">
+                nickname = #{user.nickname},
+            </if>
+            <if test="user.phone != null">
+                phone = #{user.phone},
+            </if>
+            <if test="user.avatar != null">
+                avatar = #{user.avatar},
+            </if>
+            <if test="user.sex != null">
+                sex = #{user.sex}
+            </if>
+
         </set>
         WHERE
             username = #{user.username}

@@ -20,5 +20,9 @@ public class UserDTO implements Serializable {
 
     private String nickname;
 
+    private String phone;
+
+    private int sex;
+
     private String email;
 }

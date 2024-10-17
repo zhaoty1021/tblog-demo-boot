@@ -33,20 +33,20 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @PostMapping("/user/update")
-    @SysLog("更新用户信息")
-    @Operation(summary = "更新用户信息")
-    public ResultResponse<UserVO> updateUserInfo(@RequestBody UserDTO userDTO) {
+    @PostMapping("/user/updatePassword")
+    @SysLog("修改密码")
+    @Operation(summary = "修改密码")
+    public ResultResponse<UserVO> updatePassword(@RequestBody UserDTO userDTO) {
         try {
             return ResultResponse.success(
-                    UserConverter.INSTANCE.userDTOToUserVO(userService.updateUserInfo(userDTO)),
-                    "更新成功");// 成功
+                    UserConverter.INSTANCE.userDTOToUserVO(userService.updatePassword(userDTO)),
+                    "修改密码成功");// 成功
         }catch (BizException e){
             return ResultResponse.fail(e.getCode(), e.getMessage());// 更新失败
         }
     }
 
-    @GetMapping("/user/info")
+    @GetMapping("/user/listByPage")
     @SysLog("查询用户信息")
     @Operation(summary = "分页查询用户信息")
     public ResultResponse<Pagination<UserVO>> getUserInfoByPage(@RequestParam int currentPage, @RequestParam int pageSize) {
@@ -58,6 +58,50 @@ public class UserController {
             return ResultResponse.fail(e.getCode(), e.getMessage());// 更新失败
         }
     }
+
+
+    @GetMapping("/user/info")
+    @SysLog("查询单一用户信息")
+    @Operation(summary = "用户名查询用户信息")
+    public ResultResponse<UserVO> getUserInfoByUsername(@RequestParam String username) {
+        try {
+            return ResultResponse.success(
+                    UserConverter.INSTANCE.userDTOToUserVO(userService.getUserInfoByUsername(username)),
+                    "查询成功");// 成功
+        }catch (BizException e){
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 查询失败
+        }
+
+    }
+
+
+    @PostMapping("/user/update")
+    @SysLog("更新用户信息")
+    @Operation(summary = "更新用户信息")
+    public ResultResponse<UserVO> updateUserInfo(@RequestBody UserDTO userDTO) {
+        try {
+            return ResultResponse.success(
+                    UserConverter.INSTANCE.userDTOToUserVO(userService.updateUserInfo(userDTO)),
+                    "修改密码成功");// 成功
+        }catch (BizException e){
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 更新失败
+        }
+    }
+
+    @PostMapping("/user/add")
+    @SysLog("添加用户")
+    @Operation(summary = "添加用户")
+    public ResultResponse<UserVO> addUser(@RequestBody UserDTO userDTO) {
+        try {
+            return ResultResponse.success(
+                    UserConverter.INSTANCE.userDTOToUserVO(userService.addUser(userDTO)),
+                    "添加用户成功");// 成功
+        }catch (BizException e){
+            return ResultResponse.fail(e.getCode(), e.getMessage());// 更新失败
+        }
+    }
+
+
 
 
 

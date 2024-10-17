@@ -36,7 +36,7 @@ public interface UserService extends IService<User> {
      * @param userDTO 登录DTO
      * @return userDTO 登录DTO
      */
-    UserDTO updateUserInfo(UserDTO userDTO);
+    UserDTO updatePassword(UserDTO userDTO);
     /**
      * 获取分页用户列表，currentPage表示当前页数，pageSize表示每页显示的记录条数
      * @param currentPage 当前页数
@@ -44,6 +44,27 @@ public interface UserService extends IService<User> {
      * @return Page
      */
     Pagination<UserVO> listUsersByPage(int currentPage, int pageSize);
+
+    /**
+     * 根据用户名获取用户信息
+     * @param username 用户名
+     * @return UserDTO 用户信息
+     */
+    UserDTO getUserInfoByUsername(String username);
+
+    /**
+     * 更新用户信息
+     * @param userDTO
+     * @return UserDTO
+     */
+    UserDTO updateUserInfo(UserDTO userDTO);
+
+    /**
+     * 添加用户
+     * @param userDTO
+     * @return UserDTO
+     */
+    UserDTO addUser(UserDTO userDTO);
 
 
 
