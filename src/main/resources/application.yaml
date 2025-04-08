@@ -34,6 +34,13 @@ spring:
           max-wait: -1ms
           max-idle: 8
           min-idle: 0
+    mongodb:
+      host: 124.70.85.121
+      port: 27017
+      database: t-blog
+      username: mongo_tyrone
+      password: zhao1025338
+      auto-index-creation: true
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
