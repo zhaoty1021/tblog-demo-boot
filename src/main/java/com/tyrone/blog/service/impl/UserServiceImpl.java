@@ -103,12 +103,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDTO getUserInfoByUsername(String username) {
+    public UserDTO getUserInfoByUsername() {
         // 使用 Optional 检查用户名是否为空
+        String username = StpUtil.getLoginId().toString();
         Optional.ofNullable(username).orElseThrow(() -> new BizException(CodeEnum.MISSING_PARAMETER, "username"));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         User user = userMapper.selectOne(queryWrapper);
+        System.out.println("查询到的用户信息: " + user);
+        UserDTO userDTO = UserConverter.INSTANCE.userTouserDTO(user);
+        System.out.println("转换后的用户DTO: " + userDTO);
         return UserConverter.INSTANCE.userTouserDTO(user);
     }
 

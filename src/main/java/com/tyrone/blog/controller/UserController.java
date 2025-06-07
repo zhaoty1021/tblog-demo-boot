@@ -60,13 +60,13 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/info")
-    @SysLog("查询单一用户信息")
-    @Operation(summary = "用户名查询用户信息")
-    public ResultResponse<UserVO> getUserInfoByUsername(@RequestParam String username) {
+    @GetMapping("/auth/info")
+    @SysLog("查询登录用户信息")
+    @Operation(summary = "查询登录用户信息")
+    public ResultResponse<UserVO> getUserInfoByUsername() {
         try {
             return ResultResponse.success(
-                    UserConverter.INSTANCE.userDTOToUserVO(userService.getUserInfoByUsername(username)),
+                    UserConverter.INSTANCE.userDTOToUserVO(userService.getUserInfoByUsername()),
                     "查询成功");// 成功
         }catch (BizException e){
             return ResultResponse.fail(e.getCode(), e.getMessage());// 查询失败

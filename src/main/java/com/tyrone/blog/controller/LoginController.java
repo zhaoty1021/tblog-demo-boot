@@ -56,7 +56,8 @@ public class LoginController {
         // 调用登录服务
         try {
             if (loginDTO != null) {
-                LoginVO loginVO = LoginConverter.INSTANCE.loginDTOToLoginVO(loginDTO);
+                LoginDTO loginedDTO = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
+                LoginVO loginVO = LoginConverter.INSTANCE.loginDTOToLoginVO(loginedDTO);
                 StpUtil.login(loginDTO.getUsername());
                 SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
                 loginVO.setTokenName(tokenInfo.getTokenName());

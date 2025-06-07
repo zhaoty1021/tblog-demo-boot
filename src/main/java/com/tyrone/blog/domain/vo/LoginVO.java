@@ -2,6 +2,7 @@ package com.tyrone.blog.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.Serial;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @createTime on 2024/9/21
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class LoginVO implements Serializable {
 

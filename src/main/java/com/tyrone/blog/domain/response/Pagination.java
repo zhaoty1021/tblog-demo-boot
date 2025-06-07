@@ -2,6 +2,7 @@ package com.tyrone.blog.domain.response;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @description 分页响应类
  */
 @Data
+@NoArgsConstructor
 public class Pagination<T> {
     private long current;    // 当前页
     private long size;       // 每页数量

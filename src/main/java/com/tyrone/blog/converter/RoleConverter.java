@@ -3,29 +3,64 @@ package com.tyrone.blog.converter;
 import com.tyrone.blog.domain.dto.RoleDTO;
 import com.tyrone.blog.domain.pojo.Role;
 import com.tyrone.blog.domain.vo.RoleVO;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yingxiu.zty
  * @createTime on 2024/10/10
- * @description
  */
-@Mapper
-public interface RoleConverter {
-    // 获取实例
-    RoleConverter INSTANCE = Mappers.getMapper(RoleConverter.class);
+@Component
+public class RoleConverter {
+    public static final RoleConverter INSTANCE = new RoleConverter();
 
-    // 定义 PO -> DTO 的映射
-    RoleDTO roleToRoleDTO(Role role);
+    private RoleConverter() {}
 
-    // 定义 DTO -> PO 的映射，反向映射
-    Role roleDTOToRole(RoleDTO roleDTO);
+    // Role(PO) -> RoleDTO
+    public RoleDTO roleToRoleDTO(Role role) {
+        if (role == null) {
+            return null;
+        }
+        RoleDTO dto = new RoleDTO();
+        dto.setRoleCode(role.getRoleCode());
+        dto.setRoleName(role.getRoleName());
+        dto.setDescription(role.getDescription());
+        return dto;
+    }
 
-    // dto -> vo
-    RoleVO roleDTOToRoleVO(RoleDTO roleDTO);
+    // RoleDTO -> Role(PO)
+    public Role roleDTOToRole(RoleDTO roleDTO) {
+        if (roleDTO == null) {
+            return null;
+        }
+        Role role = new Role();
+        role.setRoleCode(roleDTO.getRoleCode());
+        role.setRoleName(roleDTO.getRoleName());
+        role.setDescription(roleDTO.getDescription());
+        return role;
+    }
 
-    List<RoleVO> roleDTOListToRoleVOList(List<RoleDTO> roleDTOList);
+    // RoleDTO -> RoleVO
+    public RoleVO roleDTOToRoleVO(RoleDTO roleDTO) {
+        if (roleDTO == null) {
+            return null;
+        }
+        RoleVO vo = new RoleVO();
+        vo.setRoleCode(roleDTO.getRoleCode());
+        vo.setRoleName(roleDTO.getRoleName());
+        vo.setDescription(roleDTO.getDescription());
+        return vo;
+    }
+
+    // List<RoleDTO> -> List<RoleVO>
+    public List<RoleVO> roleDTOListToRoleVOList(List<RoleDTO> roleDTOList) {
+        if (roleDTOList == null) {
+            return null;
+        }
+        return roleDTOList.stream()
+                .map(this::roleDTOToRoleVO)
+                .collect(Collectors.toList());
+    }
 }

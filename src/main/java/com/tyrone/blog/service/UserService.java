@@ -46,11 +46,10 @@ public interface UserService extends IService<User> {
     Pagination<UserVO> listUsersByPage(int currentPage, int pageSize);
 
     /**
-     * 根据用户名获取用户信息
-     * @param username 用户名
+     * 获取用户信息
      * @return UserDTO 用户信息
      */
-    UserDTO getUserInfoByUsername(String username);
+    UserDTO getUserInfoByUsername();
 
     /**
      * 更新用户信息
