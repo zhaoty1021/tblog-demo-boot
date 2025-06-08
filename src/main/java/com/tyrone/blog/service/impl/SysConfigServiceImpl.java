@@ -3,6 +3,7 @@ package com.tyrone.blog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tyrone.blog.converter.SysConfigConverter;
+import com.tyrone.blog.domain.dto.SysConfigBatchUpdateDTO;
 import com.tyrone.blog.domain.dto.SysConfigDTO;
 import com.tyrone.blog.domain.pojo.SysConfig;
 import com.tyrone.blog.domain.vo.SysConfigVO;
@@ -11,10 +12,12 @@ import com.tyrone.blog.exceptions.BizException;
 import com.tyrone.blog.mapper.SysConfigMapper;
 import com.tyrone.blog.service.SysConfigService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +49,41 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
         sysConfigConverter.updateSysConfigFromDTO(po, dto);
         return updateById(po);
+    }
+
+    @Override
+    @Transactional
+    public boolean batchUpdateByKey(SysConfigBatchUpdateDTO batchUpdateDTO) {
+        // 获取所有配置键
+        List<String> configKeys = batchUpdateDTO.getConfigs().stream()
+                .map(SysConfigBatchUpdateDTO.ConfigItem::getConfigKey)
+                .collect(Collectors.toList());
+
+        // 查询现有配置
+        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysConfig::getConfigKey, configKeys);
+        List<SysConfig> existingConfigs = list(wrapper);
+
+        // 转换为键值映射
+        Map<String, SysConfig> configMap = existingConfigs.stream()
+                .collect(Collectors.toMap(SysConfig::getConfigKey, Function.identity()));
+
+        // 准备更新的配置列表
+        List<SysConfig> toUpdate = new ArrayList<>();
+
+        for (SysConfigBatchUpdateDTO.ConfigItem item : batchUpdateDTO.getConfigs()) {
+            SysConfig config = configMap.get(item.getConfigKey());
+            if (config == null) {
+                throw new BizException(CodeEnum.DATA_NOT_EXIST,
+                        String.format("配置键[%s]不存在", item.getConfigKey()));
+            }
+
+            // 只更新值，保留其他字段不变
+            config.setConfigValue(item.getConfigValue());
+            toUpdate.add(config);
+        }
+
+        return updateBatchById(toUpdate);
     }
 
     @Override

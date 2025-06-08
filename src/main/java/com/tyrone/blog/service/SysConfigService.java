@@ -1,6 +1,7 @@
 package com.tyrone.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tyrone.blog.domain.dto.SysConfigBatchUpdateDTO;
 import com.tyrone.blog.domain.dto.SysConfigDTO;
 import com.tyrone.blog.domain.pojo.SysConfig;
 import com.tyrone.blog.domain.vo.SysConfigVO;
@@ -27,6 +28,13 @@ public interface SysConfigService extends IService<SysConfig> {
      * @return 更新结果
      */
     boolean updateConfigByKey(SysConfigDTO dto);
+
+    /**
+     * 批量更新配置
+     * @param batchUpdateDTO 批量更新DTO
+     * @return 更新结果
+     */
+    boolean batchUpdateByKey(SysConfigBatchUpdateDTO batchUpdateDTO);
 
     /**
      * 获取配置详情
