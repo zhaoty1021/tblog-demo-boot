@@ -32,20 +32,23 @@ public class MinioUtils {
     @Value("${minio.bucket-name}")
     private String bucketName;
 
+    @Value("${minio.endpoint}")
+    private String baseUrl;
+
     @Resource
     private MinioClient minioClient;
 
+    public MinioUtils(MinioClient minioClient) {
+        this.minioClient = minioClient;
+    }
+
     /**
      * description: 判断bucket是否存在，不存在则创建
-     * @param name name of the bucket
      *
      */
-    public boolean existBucket(String name) {
-        try {
-            boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(name).build());
-            return exists;
-        } catch (Exception e) {
-            return false;
+    private void ensureBucketExists() throws Exception {
+        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         }
     }
 
@@ -55,26 +58,22 @@ public class MinioUtils {
      * @param file 文件
      * @return List<String> 文件名集合
      */
-    public boolean uploadFile(MultipartFile file, String dir){
+    public boolean uploadFile(MultipartFile file, String objectName) {
         try {
-            // 检查存储桶是否存在
-            if(!existBucket(bucketName)){
-                throw new BizException(CodeEnum.BUCKET_NOT_EXIST);
-            }
-            // 上传文件
+            // 确保存储桶存在
+            ensureBucketExists();
+
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(dir + file.getOriginalFilename())
+                            .object(objectName)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
-                            .build()
-            );
+                            .build());
             return true;
-        }catch (Exception e){
-            throw new BizException(CodeEnum.UPLOAD_FILE_ERROR);
+        } catch (Exception e) {
+            throw new BizException("文件上传失败: " + e.getMessage());
         }
-
     }
 
     /**
@@ -139,6 +138,26 @@ public class MinioUtils {
         } catch (Exception e) {
             throw new BizException(CodeEnum.GET_FILE_URL_ERROR);
         }
+    }
+
+    public String getPermanentUrl(String fileName) {
+        return baseUrl+ "/" + bucketName + "/" + fileName;
+    }
+
+    public boolean isImage(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image/");
+    }
+
+    public String getExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = filename.lastIndexOf('.');
+        return index == -1 ? "" : filename.substring(index + 1);
     }
 }
 

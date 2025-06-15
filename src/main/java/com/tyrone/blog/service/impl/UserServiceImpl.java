@@ -98,6 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         pagination.setCurrent(page.getCurrent());
         pagination.setSize(page.getSize());
         pagination.setTotal(page.getTotal());
+        pagination.setPages(page.getPages());
         pagination.setRecords(userVOs);
         return pagination;
     }

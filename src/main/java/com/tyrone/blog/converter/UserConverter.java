@@ -30,6 +30,7 @@ public class UserConverter {
         dto.setPhone(user.getPhone());
         dto.setSex(user.getSex());
         dto.setEmail(user.getEmail());
+        dto.setAvatar(user.getAvatar());
         return dto;
     }
 
@@ -45,6 +46,7 @@ public class UserConverter {
         user.setPhone(userDTO.getPhone());
         user.setSex(userDTO.getSex());
         user.setEmail(userDTO.getEmail());
+        user.setAvatar(userDTO.getAvatar());
         return user;
     }
 
@@ -59,6 +61,7 @@ public class UserConverter {
         vo.setEmail(userDTO.getEmail());
         vo.setSex(userDTO.getSex());
         vo.setPhone(userDTO.getPhone());
+        vo.setAvatar(userDTO.getAvatar());
         // 注意：UserDTO中没有avatar、registerIp等字段，所以这些字段不会被设置
         return vo;
     }

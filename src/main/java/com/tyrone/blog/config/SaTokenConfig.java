@@ -49,8 +49,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 或者更具体，如 /api/**
-                .allowedOrigins("http://localhost:3006") // 前端地址
-                .allowedOrigins("http://124.70.85.121")
+                .allowedOrigins("http://localhost:3006","http://124.70.85.121") // 前端地址
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

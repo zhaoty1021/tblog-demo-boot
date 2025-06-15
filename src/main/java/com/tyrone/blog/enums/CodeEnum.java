@@ -37,6 +37,7 @@ public enum CodeEnum {
     UPLOAD_FILE_ERROR("300002", "上传文件失败"),
     DOWNLOAD_FILE_ERROR("300003", "下载文件失败"),
     GET_FILE_URL_ERROR("300004", "获取文件url失败"),
+    FILE_TYPE_ERROR("300005", "文件类型错误"),
 
     /** redis 错误码 **/
     REDIS_UNKNOWN_ERROR("400001", "Redis未知错误"),
