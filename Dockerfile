@@ -1,24 +1,33 @@
-# 使用JDK 17的官方镜像（推荐slim版本以减小体积）
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-alpine
 
-# 设置工作目录
+# 1. 预创建所有目录（root阶段）
+RUN mkdir -p /app/logs/gc && \
+    chown -R 1000:1000 /app && \
+    chmod -R 777 /app
+
+# 2. 移除时区设置（节省10MB+）
+ENV TZ=Asia/Shanghai
+
+# 3. 使用更小的基础镜像
+# FROM bellsoft/liberica-openjre-alpine:17.0.8-7  # 比eclipse镜像小20MB
+
 WORKDIR /app
 
-# 创建日志目录（需与logback配置中的路径一致）
-RUN mkdir -p /app/logs/archive
+# 4. 使用普通用户UID运行（不创建用户）
+USER 1000
 
-# 复制JAR文件到镜像中（假设JAR文件名为app.jar）
-COPY target/tblog-demo-boot-0.0.1-SNAPSHOT.jar tblog-demo-boot-0.0.1.jar
+COPY --chown=1000:1000 target/tblog-demo-boot-*.jar app.jar
 
-# 暴露端口（根据实际端口修改）
+# 5. 激进内存参数
+ENV JAVA_OPTS="-XX:+UseSerialGC \
+               -Xmx64m \
+               -XX:MaxMetaspaceSize=128m \
+               -XX:CompressedClassSpaceSize=32m \
+               -XX:+DisableExplicitGC \
+               -XX:+HeapDumpOnOutOfMemoryError \
+               -XX:HeapDumpPath=/app/logs/gc/heapdump.hprof"
+
 EXPOSE 8888
 
-# 设置时区为上海（可选）
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# JVM参数配置（根据实际情况调整）
-ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/app/logs/gc"
-
-# 启动应用（JDK 17无需特殊参数）
-ENTRYPOINT ["java", "-jar", "tblog-demo-boot-0.0.1.jar"]
+# 6. 禁用JMX和agent
+ENTRYPOINT exec java $JAVA_OPTS -jar -Dspring.jmx.enabled=false app.jar

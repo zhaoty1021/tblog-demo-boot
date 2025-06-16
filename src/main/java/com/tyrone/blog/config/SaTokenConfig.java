@@ -41,6 +41,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                         "/**/swagger-resources",
                         "/**/webjars/**",
                         "/**/v2/api-docs/**",
+                        "/api/admin/config/group/**",
                         "/api/register",
                         "/api/login");
 
@@ -49,7 +50,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 或者更具体，如 /api/**
-                .allowedOrigins("http://localhost:3006","http://124.70.85.121") // 前端地址
+                .allowedOrigins("http://localhost:3006","http://localhost:8999","http://124.70.85.121") // 前端地址
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

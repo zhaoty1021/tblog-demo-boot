@@ -60,6 +60,36 @@ public class FileController {
     }
 
     /**
+     * logo专用上传接口
+     */
+    @PostMapping("/logo")
+    @Operation(summary = "上传LOGO")
+    public ResultResponse<String> uploadLogo(@RequestParam("file") MultipartFile file) {
+        try {
+            // 指定头像存储目录
+            String fileUrl = uploadService.uploadImage(file, "logo");
+            return ResultResponse.success(fileUrl, "logo上传成功");
+        } catch (BizException e) {
+            return ResultResponse.error(e);
+        }
+    }
+
+    /**
+     * 背景图专用上传接口
+     */
+    @PostMapping("/background")
+    @Operation(summary = "上传背景图")
+    public ResultResponse<String> uploadBackground(@RequestParam("file") MultipartFile file) {
+        try {
+            // 指定头像存储目录
+            String fileUrl = uploadService.uploadImage(file, "background");
+            return ResultResponse.success(fileUrl, "背景图上传成功");
+        } catch (BizException e) {
+            return ResultResponse.error(e);
+        }
+    }
+
+    /**
      * 获取文件临时访问URL
      */
     @GetMapping("/url")
