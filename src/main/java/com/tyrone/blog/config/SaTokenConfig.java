@@ -42,6 +42,8 @@ public class SaTokenConfig implements WebMvcConfigurer {
                         "/**/webjars/**",
                         "/**/v2/api-docs/**",
                         "/api/admin/config/group/**",
+                        "/api/articles/list",
+                        "/api/articles/detail/**",
                         "/api/register",
                         "/api/login");
 

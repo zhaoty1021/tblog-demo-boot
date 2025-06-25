@@ -60,6 +60,21 @@ public class FileController {
     }
 
     /**
+     * 封面专用上传接口
+     */
+    @PostMapping("/cover")
+    @Operation(summary = "上传封面")
+    public ResultResponse<String> uploadCover(@RequestParam("file") MultipartFile file) {
+        try {
+            // 指定头像存储目录
+            String fileUrl = uploadService.uploadImage(file, "covers");
+            return ResultResponse.success(fileUrl, "封面上传成功");
+        } catch (BizException e) {
+            return ResultResponse.error(e);
+        }
+    }
+
+    /**
      * logo专用上传接口
      */
     @PostMapping("/logo")

@@ -29,6 +29,9 @@ public enum CodeEnum {
     LOGIN_TOKEN_ERROR("100005","登录令牌错误"),
     USERNAME_EXIST("100006","用户名已存在"),
 
+    ARTICLE_OPERATION_ERROR("100007", "文章操作失败"),
+    ARTICLE_NOT_EXIST("100008", "文章不存在"),
+
     /* 限流 **/
     RATE_LIMIT_ERROR("200001","操作过于频繁，请稍后重试"),
 

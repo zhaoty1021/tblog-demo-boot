@@ -37,4 +37,12 @@ public class Pagination<T> {
         this.pages = page.getTotalPages();
         this.records = page.getContent();
     }
+
+    public Pagination(com.baomidou.mybatisplus.core.metadata.IPage<T> page) {
+        this.current = page.getCurrent();
+        this.size = page.getSize();
+        this.total = page.getTotal();
+        this.pages = page.getPages();
+        this.records = page.getRecords();
+    }
 }
