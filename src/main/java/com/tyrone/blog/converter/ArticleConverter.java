@@ -29,6 +29,7 @@ public class ArticleConverter {
         dto.setArticleCover(article.getArticleCover());
         dto.setArticleDesc(article.getArticleDesc());
         dto.setArticleType(article.getArticleType());
+        dto.setWordCount(article.getWordCount());
         dto.setIsTop(article.getIsTop());
         dto.setStatus(article.getStatus());
         return dto;
@@ -45,6 +46,7 @@ public class ArticleConverter {
         article.setArticleCover(articleDTO.getArticleCover());
         article.setArticleDesc(articleDTO.getArticleDesc());
         article.setArticleType(articleDTO.getArticleType());
+        article.setWordCount(articleDTO.getWordCount());
         article.setIsTop(articleDTO.getIsTop());
         article.setStatus(articleDTO.getStatus());
         return article;
@@ -61,6 +63,7 @@ public class ArticleConverter {
         vo.setArticleCover(article.getArticleCover());
         vo.setArticleDesc(article.getArticleDesc());
         vo.setArticleType(article.getArticleType());
+        vo.setWordCount(article.getWordCount());
         vo.setIsTop(article.getIsTop());
         vo.setStatus(article.getStatus());
         vo.setCreateTime(article.getCreateTime());

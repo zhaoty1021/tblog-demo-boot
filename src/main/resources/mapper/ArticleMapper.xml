@@ -11,6 +11,7 @@
             <result property="articleDesc" column="article_desc" />
             <result property="articleContent" column="article_content" />
             <result property="articleType" column="article_type" />
+            <result property="wordCount" column="word_count" />
             <result property="isTop" column="is_top" />
             <result property="status" column="status" />
             <result property="updateBy" column="update_by" />
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,article_cover,article_title,article_desc,article_content,article_type,
+        id,article_cover,article_title,article_desc,article_content,article_type,word_count
         is_top,status,update_by,is_deleted,create_time,
         update_time
     </sql>

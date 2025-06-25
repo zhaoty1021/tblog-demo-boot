@@ -50,6 +50,11 @@ public class Article implements Serializable {
     private Integer articleType;
 
     /**
+     * 字数
+     */
+    private Integer wordCount;
+
+    /**
      * 是否置顶 (0否 1是）
      */
     private Integer isTop;

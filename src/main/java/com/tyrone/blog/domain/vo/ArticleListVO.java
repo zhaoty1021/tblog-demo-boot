@@ -18,6 +18,7 @@ public class ArticleListVO {
     private String articleCover;
     private String articleDesc;
     private Integer articleType;
+    private Integer wordCount;
     private Integer isTop;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

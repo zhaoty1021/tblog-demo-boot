@@ -19,6 +19,7 @@ public class ArticleVO {
     private String articleCover;
     private String articleDesc;
     private Integer articleType;
+    private Integer wordCount;
     private Integer isTop;
     private Integer status;
     private Long categoryId;

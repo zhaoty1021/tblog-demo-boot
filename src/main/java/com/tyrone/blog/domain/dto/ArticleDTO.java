@@ -26,6 +26,9 @@ public class ArticleDTO {
     @NotNull(message = "文章类型不能为空")
     private Integer articleType;
 
+    @NotNull(message = "字数不能为空")
+    private Integer wordCount;
+
     @NotNull(message = "是否置顶不能为空")
     private Integer isTop;
 
