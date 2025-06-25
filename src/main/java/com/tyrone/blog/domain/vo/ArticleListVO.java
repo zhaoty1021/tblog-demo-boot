@@ -1,6 +1,8 @@
 package com.tyrone.blog.domain.vo;
 
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class ArticleListVO {
     private String articleDesc;
     private Integer articleType;
     private Integer isTop;
-    private Date createTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;

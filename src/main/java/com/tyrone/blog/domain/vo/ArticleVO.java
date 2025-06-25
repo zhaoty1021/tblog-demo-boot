@@ -1,6 +1,8 @@
 package com.tyrone.blog.domain.vo;
 
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class ArticleVO {
     private Long categoryId;
     private String categoryName;
     private List<String> tagNames;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
